@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace必须和接口名字一致-->
+<mapper namespace="com.clearsky.ssm.dao.UserDao">
+    <!--id必须和接口方法名一致  resultType返回的结果和对应实体类一直，开启别名后可以不写全类名，直接写类名，不区分大小写-->
+    <select id="findAll" resultType="user">
+        select * from t_users
+    </select>
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+    <!--扫描业务层service实现类包，扫描到的包里面spring的注解会交给spring来管理-->
+    <context:component-scan base-package="com.clearsky.ssm"/>
+    <!--读取数据库的配置文件-->
+    <context:property-placeholder location="classpath:db.properties"/>
+    <!--配置Druid数据源-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${jdbc.driverClass}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+    <!--使用配置spring事务管理，使用此事务需要导入spring-jdbc坐标-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!--注入数据源-->
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!--开启注解书屋-->
+    <tx:annotation-driven/>
+    <!--以下注释部分是事务的配置，使用注解不需要配置以下-->
+    <!--transaction-manager默认transactionManager，如果DataSourceTransactionManager 的id是transactionManager可以不写-->
+    <!--  <tx:advice id="txAdvice" transaction-manager="transactionManager">
+          <tx:attributes>
+              &lt;!&ndash;配置事务方法 支持通配符 适用于查询，&ndash;&gt;
+              <tx:method name="find*" propagation="SUPPORTS" read-only="true"/>
+              &lt;!&ndash;一般适用于增删改&ndash;&gt;
+              <tx:method name="*"/>
+          </tx:attributes>
+      </tx:advice>
+      &lt;!&ndash;开启切片&ndash;&gt;
+      <aop:config>
+          <aop:advisor advice-ref="txAdvice" pointcut="execution(* com.besokuse.ssm.service.impl.*(..))"/>
+      </aop:config>-->
+    <!--mybatis整合spring -->
+    <bean id="sessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--注入数据源-->
+        <property name="dataSource" ref="dataSource"/>
+        <!--开起别名包扫描，扫描到实体类的包名即可-->
+        <property name="typeAliasesPackage" value="com.clearsky.ssm.pojo"/>
+        <!--加载mybatis配置文件-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+    </bean>
+    <!--配置扫描dao映射文件-->
+    <bean id="basePackage" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.clearsky.ssm.dao"/>
+    </bean>
+</beans>

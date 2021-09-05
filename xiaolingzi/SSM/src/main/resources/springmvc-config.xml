@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <!--扫描控制器-->
+    <context:component-scan base-package="com.clearsky.ssm.controller"/>
+    <!--放行静态资源-->
+    <mvc:default-servlet-handler/>
+    <!--开启注解-->
+    <mvc:annotation-driven/>
+    <!--配置视图解析器-->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!--前缀-->
+        <property name="prefix" value="/WEB-INF/page/"/>
+        <!--后缀-->
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    <!--配置文件上传 id需为multipartResolver-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!--配置最大上传 以字节为单位计算-->
+        <property name="maxUploadSize" value="5789997"/>
+    </bean>
+    <!--配置异常页面-->
+<!--    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">-->
+<!--        <property name="exceptionMappings">-->
+<!--            <props>-->
+<!--                <prop key="java.lang.Exception">error</prop>-->
+<!--            </props>-->
+<!--        </property>-->
+<!--    </bean>-->
+    <!--配置拦截器-->
+<!--    <mvc:interceptors>-->
+<!--        <mvc:interceptor>-->
+<!--            &lt;!&ndash;拦截所有资源&ndash;&gt;-->
+<!--            <mvc:mapping path="/**"/>-->
+<!--            &lt;!&ndash;排除拦截的路径&ndash;&gt;-->
+<!--            <mvc:exclude-mapping path="/user/toLogin"/>-->
+<!--            <mvc:exclude-mapping path="/user/login"/>-->
+<!--            &lt;!&ndash;自己编写的拦截器&ndash;&gt;-->
+<!--            <bean class="com.besokuse.ssm.interceptor.MyInterceptor"/>-->
+<!--        </mvc:interceptor>-->
+<!--    </mvc:interceptors>-->
+</beans>
